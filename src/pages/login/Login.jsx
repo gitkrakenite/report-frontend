@@ -15,7 +15,7 @@ const Login = () => {
     <div className="loginWrapper">
       <div className="loginContainer">
         <div className="login__formSlide">
-          <h1>Valerian Chat</h1>
+          <h1>Co-operative University</h1>
 
           <h2>Login</h2>
           <form onSubmit={handleSubmit}>
@@ -57,7 +57,7 @@ const Login = () => {
         {/*  */}
         <div className="loginimageSlide">
           <img
-            src="https://images.pexels.com/photos/2307562/pexels-photo-2307562.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="https://images.pexels.com/photos/6147083/pexels-photo-6147083.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt=""
           />
         </div>

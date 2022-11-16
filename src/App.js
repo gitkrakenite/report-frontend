@@ -3,7 +3,7 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/landing/Landing";
-import Profile from "./pages/profile/Profile";
+import Profile from "./pages/create/Create";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
 
           <Route exact path="/" element={<Landing />} />
 
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="create" element={<Profile />} />
         </Routes>
       </Router>
     </div>

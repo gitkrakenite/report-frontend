@@ -9,6 +9,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [profile, setProfile] = useState("");
   const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
 
   const handleSubmit = () => {};
 
@@ -17,12 +18,12 @@ const Register = () => {
       <div className="registerContainer">
         <div className="imageSlide">
           <img
-            src="https://images.pexels.com/photos/3228812/pexels-photo-3228812.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="https://images.pexels.com/photos/9158997/pexels-photo-9158997.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt=""
           />
         </div>
         <div className="formSlide">
-          <h1>Valerian Chat</h1>
+          <h1>Co-operative University</h1>
 
           <h2>Register</h2>
           <form onSubmit={handleSubmit}>
@@ -30,7 +31,7 @@ const Register = () => {
               type="text"
               name=""
               value={username}
-              placeholder="Create a username"
+              placeholder="Your Full Name"
               id=""
               onChange={(e) => {
                 setUsername(e.target.value);
@@ -39,7 +40,7 @@ const Register = () => {
             <input
               type="email"
               name=""
-              placeholder="Enter your email"
+              placeholder="Enter your student email"
               value={email}
               id=""
               onChange={(e) => {
@@ -73,6 +74,16 @@ const Register = () => {
               id=""
               onChange={(e) => {
                 setPassword(e.target.value);
+              }}
+            />
+            <input
+              type="password"
+              name=""
+              value={password2}
+              placeholder="Confirm Password"
+              id=""
+              onChange={(e) => {
+                setPassword2(e.target.value);
               }}
             />
 

@@ -1,18 +1,114 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiArrowUpRight } from "react-icons/fi";
 import { BsCloudUpload } from "react-icons/bs";
 import "./register.css";
 import { Link } from "react-router-dom";
 
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { register, reset } from "../../features/auth/authSlice";
+import Spinner from "../../components/Spinner";
+
+// useSlector is used to read stuff from state and useDispatch to trigger actions
+
 const Register = () => {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [profile, setProfile] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  // Convert image into url using cloudinary
+  const postDetails = (pics) => {
+    setLoading(true);
+    if (pics === null || undefined) {
+      toast({
+        title: "Please select an Image",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+
+    if (
+      pics.type === "image/jpeg" ||
+      pics.type === "image/png" ||
+      pics.type === "image/jpg"
+    ) {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "hooksie");
+      data.append("cloud_name", "ddyw2aavm");
+      fetch("https://api.cloudinary.com/v1_1/ddyw2aavm/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // if we dont have a response from cloudinary back which is data.url then we will show an error
+          if (data.url === undefined) {
+            toast({
+              title: "Please select an Image",
+              status: "warning",
+              duration: 5000,
+              isClosable: true,
+              position: "bottom",
+            });
+            return;
+          }
+          setProfile(data.url);
+          setLoading(false);
+          console.log(data.url);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      toast({
+        title: "Please select an image",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (password !== password2) {
+      toast.error("Passwords do not match");
+    } else {
+      const userData = { name, email, profile, password };
+      console.log(profile);
+      dispatch(register(userData));
+    }
   };
 
   return (
@@ -32,12 +128,12 @@ const Register = () => {
             <input
               type="text"
               name=""
-              value={username}
+              value={name}
               placeholder="Your Full Name (text only)"
               pattern="[A-Za-z]"
               required
               onChange={(e) => {
-                setUsername(e.target.value);
+                setName(e.target.value);
               }}
             />
             <input
@@ -54,15 +150,13 @@ const Register = () => {
 
             <div className="fileUpload">
               <BsCloudUpload className="upload" />
+
               <input
                 type="file"
                 name=""
-                value={profile}
-                placeholder="Your profile"
                 id=""
-                onChange={(e) => {
-                  setProfile(e.target.value);
-                }}
+                accept="image/*"
+                onChange={(e) => postDetails(e.target.files[0])}
               />
               <p>
                 Recommendation: Use high-quality JPG, JPEG, SVG or PNG as your
@@ -92,9 +186,21 @@ const Register = () => {
               }}
             />
 
-            <button type="submit" onClick={handleSubmit}>
-              Register
-            </button>
+            {loading ? (
+              <h4>Uploading Profile</h4>
+            ) : (
+              <button type="submit" onClick={handleSubmit}>
+                Register
+              </button>
+            )}
+
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <button type="submit" onClick={handleSubmit}>
+                Register
+              </button>
+            )}
           </form>
 
           <Link to={"/login"} style={{ textDecoration: "none" }}>

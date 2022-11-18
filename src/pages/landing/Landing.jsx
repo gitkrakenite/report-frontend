@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsCloudUpload } from "react-icons/bs";
+
+import { useSelector, useDispatch } from "react-redux";
+import { logout, reset } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 import "./landing.css";
 
@@ -9,12 +13,30 @@ const Landing = () => {
   const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // access the user from redux
+  const { user } = useSelector((state) => state.auth);
+
   const handleSubmit = () => {};
+
+  const handleLogout = async () => {
+    dispatch(logout());
+    dispatch(reset());
+    navigate("/login");
+  };
   const handleClear = () => {
     setTitle("");
     setDescription("");
     setImage("");
   };
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="landingWrapper">
@@ -39,8 +61,8 @@ const Landing = () => {
               </p>
             </div>
             <div className="landingProfileEdit">
-              <button>Edit Personal Details</button>
-              <span>Logout</span>
+              {/* <button>Edit Personal Details</button> */}
+              <span onClick={handleLogout}>Logout</span>
             </div>
           </div>
 

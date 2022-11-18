@@ -5,20 +5,24 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/landing/Landing";
 import Profile from "./pages/create/Create";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
 
           <Route path="/register" element={<Register />} />
 
-          <Route exact path="/" element={<Landing />} />
-
           <Route path="create" element={<Profile />} />
         </Routes>
       </Router>
+
+      {/* <ToastContainer /> */}
     </div>
   );
 }

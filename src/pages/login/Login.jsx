@@ -1,15 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiArrowUpRight } from "react-icons/fi";
 
 import "./login.css";
 
 import { Link } from "react-router-dom";
 
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { login, reset } from "../../features/auth/authSlice";
+import Spinner from "../../components/Spinner";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = () => {};
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userData = { email, password };
+    dispatch(login(userData));
+  };
 
   return (
     <div className="loginWrapper">
@@ -41,9 +70,13 @@ const Login = () => {
               }}
             />
 
-            <button type="submit" onClick={handleSubmit}>
-              Login
-            </button>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <button type="submit" onClick={handleSubmit}>
+                Login
+              </button>
+            )}
           </form>
 
           <Link to={"/register"} style={{ textDecoration: "none" }}>

@@ -6,7 +6,7 @@ import "./login.css";
 import { Link } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = () => {};
@@ -20,13 +20,13 @@ const Login = () => {
           <h2>Login</h2>
           <form onSubmit={handleSubmit}>
             <input
-              type="text"
+              type="email"
               name=""
-              value={username}
-              placeholder="Create a username"
+              value={email}
+              placeholder="Your Student Email"
               id=""
               onChange={(e) => {
-                setUsername(e.target.value);
+                setEmail(e.target.value);
               }}
             />
 
@@ -34,7 +34,7 @@ const Login = () => {
               type="password"
               name=""
               value={password}
-              placeholder="Create a secure password"
+              placeholder="Enter your password"
               id=""
               onChange={(e) => {
                 setPassword(e.target.value);

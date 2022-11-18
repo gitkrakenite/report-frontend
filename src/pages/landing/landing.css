@@ -197,11 +197,6 @@
   flex-direction: column;
   gap: 15px;
 }
-.createIssueWrapper form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
 
 .createIssueWrapper form input {
   padding: 10px;
@@ -242,4 +237,78 @@
   font-weight: 500;
   border-radius: 10px;
   cursor: pointer;
+}
+
+@media (max-width: 1300px) {
+  .landingContainer {
+    flex: 0.8;
+  }
+
+  .createIssueWrapper {
+    flex: 0.2;
+  }
+
+  .landingProfile h1 {
+    font-size: 20px;
+  }
+
+  .previouslyPostedIssues h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .landingProfileShowInfo {
+    display: block;
+  }
+}
+
+@media (max-width: 1100px) {
+  .landingWrapper {
+    padding: 1em 2em;
+    background-color: #f2f4f7;
+    display: flex;
+    gap: 1em;
+    height: 100%;
+  }
+
+  .landingContainer {
+    flex: 0.9;
+  }
+
+  .createIssueWrapper {
+    flex: 0.1;
+    /* display: none; */
+  }
+}
+
+@media (max-width: 1000px) {
+  .landingWrapper {
+    padding: 1em 2em;
+    background-color: #f2f4f7;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 3em;
+    height: 100%;
+  }
+}
+
+/* individual media  */
+
+@media (max-width: 430px) {
+  .landingWrapper {
+    padding: 1em 1em;
+    background-color: #f2f4f7;
+    display: flex;
+    gap: 1em;
+    height: 100%;
+  }
+
+  .landingProfile {
+    top: 0;
+    padding-top: 20px;
+    z-index: 1;
+    position: sticky;
+    background-color: rgb(235, 232, 232);
+  }
 }

@@ -20,7 +20,7 @@ const Landing = () => {
     <div className="landingWrapper">
       <div className="landingContainer">
         <div className="landingProfile">
-          <h1>Good Morning John. Here is your info</h1>
+          <h1>Hello John. Here is your info</h1>
 
           <div className="landingProfileShowInfo">
             <div className="landingProfileImage">

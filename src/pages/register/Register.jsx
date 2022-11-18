@@ -11,7 +11,9 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="registerWrapper">
@@ -31,17 +33,19 @@ const Register = () => {
               type="text"
               name=""
               value={username}
-              placeholder="Your Full Name"
-              id=""
+              placeholder="Your Full Name (text only)"
+              pattern="[A-Za-z]"
+              required
               onChange={(e) => {
                 setUsername(e.target.value);
               }}
             />
             <input
               type="email"
-              name=""
+              required
               placeholder="Enter your student email"
               value={email}
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
               id=""
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -68,10 +72,11 @@ const Register = () => {
 
             <input
               type="password"
-              name=""
+              required
               value={password}
-              placeholder="Create a secure password"
+              placeholder="Password more than 8 characters"
               id=""
+              pattern=".{8,}"
               onChange={(e) => {
                 setPassword(e.target.value);
               }}

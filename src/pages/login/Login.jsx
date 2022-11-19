@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login, reset } from "../../features/auth/authSlice";
 import Spinner from "../../components/Spinner";
+import { useToast } from "@chakra-ui/react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
@@ -24,10 +26,24 @@ const Login = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message);
+      // toast.error(message);
+      toast({
+        title: `Invalid credentials`,
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     }
 
-    if (isSuccess || user) {
+    if (user || isSuccess) {
+      toast({
+        title: "Action Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
       navigate("/");
     }
 
@@ -36,8 +52,31 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userData = { email, password };
-    dispatch(login(userData));
+
+    if (!email || !password) {
+      toast({
+        title: "Please Fill all the Feilds",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    } else {
+      try {
+        const userData = { email, password };
+        dispatch(login(userData));
+      } catch (error) {
+        toast({
+          title: "Error Occured!",
+          description: error.response.data.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
+    }
   };
 
   return (
@@ -71,7 +110,7 @@ const Login = () => {
             />
 
             {isLoading ? (
-              <Spinner />
+              <Spinner message="Please wait" />
             ) : (
               <button type="submit" onClick={handleSubmit}>
                 Login

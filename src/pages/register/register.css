@@ -2,12 +2,15 @@
   background-color: #4267b2;
   height: 100vh;
   overflow: hidden;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
 }
 
 .registerContainer {
   display: flex;
   width: 70%;
-  height: 100vh;
+  height: 98vh;
+
   gap: 1.4em;
   margin: auto;
   background-color: #fff;
@@ -177,12 +180,15 @@
 @media (max-width: 376px) {
   .registerWrapper {
     background-color: #4267b2;
-    height: 110vh;
+    height: 120vh;
     overflow: hidden;
+    padding-top: 1px;
+    padding-bottom: 1px;
   }
 
   .registerContainer {
-    height: 110vh;
+    height: 120vh;
+    overflow: scroll;
   }
 }
 

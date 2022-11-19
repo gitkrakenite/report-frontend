@@ -1,4 +1,5 @@
 import axios from "axios";
+
 // this file is strictly for the http requests, sending the data back and storing in localstorage
 
 const API_URL = "http://localhost:5000/api/v1/user/";

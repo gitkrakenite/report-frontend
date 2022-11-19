@@ -6,9 +6,11 @@ import { Link } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { register, reset } from "../../features/auth/authSlice";
 import Spinner from "../../components/Spinner";
+
+import { useToast } from "@chakra-ui/react";
 
 // useSlector is used to read stuff from state and useDispatch to trigger actions
 
@@ -20,6 +22,8 @@ const Register = () => {
   const [password2, setPassword2] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const toast = useToast();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -29,10 +33,24 @@ const Register = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message);
+      // toast.error(message);
+      toast({
+        title: `Something went wrong`,
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     }
 
     if (isSuccess || user) {
+      toast({
+        title: "Action Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
       navigate("/");
     }
 
@@ -103,11 +121,47 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== password2) {
-      toast.error("Passwords do not match");
+      toast({
+        title: "Password don't match",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+
+    if (!name || !email || !password) {
+      toast({
+        title: "Name, email and password needed",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
     } else {
-      const userData = { name, email, profile, password };
-      console.log(profile);
-      dispatch(register(userData));
+      try {
+        const userData = { name, email, profile, password };
+        // console.log(profile);
+        dispatch(register(userData));
+        toast({
+          title: "Registration Successful",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      } catch (error) {
+        toast({
+          title: "Error Occured!",
+          description: error.response.data.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
     }
   };
 
@@ -186,16 +240,8 @@ const Register = () => {
               }}
             />
 
-            {loading ? (
-              <h4>Uploading Profile</h4>
-            ) : (
-              <button type="submit" onClick={handleSubmit}>
-                Register
-              </button>
-            )}
-
-            {isLoading ? (
-              <Spinner />
+            {isLoading || loading ? (
+              <Spinner message="Activity happening" />
             ) : (
               <button type="submit" onClick={handleSubmit}>
                 Register

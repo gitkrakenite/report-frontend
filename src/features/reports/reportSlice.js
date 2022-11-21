@@ -67,6 +67,27 @@ export const deleteReport = createAsyncThunk(
   }
 );
 
+// admin get all reports
+export const getAllReports = createAsyncThunk(
+  "report/getAllReports",
+  async (_, thunkAPI) => {
+    try {
+      return await reportService.getAllReports();
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// admin update reports
+export const updateReport = createAsyncThunk("report/updateReport");
+
 // Report slice
 export const reportSlice = createSlice({
   name: "report",
@@ -90,6 +111,20 @@ export const reportSlice = createSlice({
         state.message = action.payload;
         // state.reports = null;
       })
+      // .addCase(updateReport.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      .addCase(updateReport.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.reports = action.payload;
+      })
+      .addCase(updateReport.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        // state.reports = null;
+      })
       .addCase(getReports.pending, (state) => {
         state.isLoading = true;
       })
@@ -99,6 +134,20 @@ export const reportSlice = createSlice({
         state.reports = action.payload;
       })
       .addCase(getReports.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        // state.reports = null;
+      })
+      .addCase(getAllReports.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllReports.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.reports = action.payload;
+      })
+      .addCase(getAllReports.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

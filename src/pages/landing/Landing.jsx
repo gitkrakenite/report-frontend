@@ -11,13 +11,14 @@ import {
   deleteReport,
 } from "../../features/reports/reportSlice";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useToast } from "@chakra-ui/react";
 
 import "./landing.css";
 import Spinner from "../../components/Spinner";
 import moment from "moment";
+import axios from "axios";
 
 const Landing = () => {
   const [title, setTitle] = useState("");
@@ -26,9 +27,13 @@ const Landing = () => {
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [fetchedCategory, setFetchedCategory] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const toast = useToast();
+
+  const url = "http://localhost:5000/api/v1/report/admin/39104245/";
 
   // access the user from redux
   const { user } = useSelector((state) => state.auth);
@@ -37,6 +42,13 @@ const Landing = () => {
   const { reports, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.reports
   );
+
+  // fetch categories from db
+  const fetchCategories = async () => {
+    const response = await axios.get(`${url}cat`);
+    setFetchedCategory(response.data);
+    // console.log(response.data);
+  };
 
   // Convert image into url using cloudinary
   const postDetails = (pics) => {
@@ -112,9 +124,12 @@ const Landing = () => {
       return;
     } else {
       try {
-        const reportData = { title, category, image, description };
+        const email = user.email;
+        const name = user.name;
+        const reportData = { title, category, image, description, email, name };
         // console.log(profile);
         dispatch(createReport(reportData));
+        console.log(reportData);
         handleClear();
 
         toast({
@@ -179,6 +194,8 @@ const Landing = () => {
       navigate("/login");
     }
 
+    fetchCategories();
+
     dispatch(getReports());
     return () => {
       dispatch(reset());
@@ -198,8 +215,7 @@ const Landing = () => {
             {/*  */}
             <div className="landingProfileText">
               <p>
-                <span>Name</span>
-                {user && user.name}
+                <span>Name</span> {"  "} {user && user.name}
               </p>
               <p>
                 <span>Email</span> {user && user.email}
@@ -208,6 +224,9 @@ const Landing = () => {
             <div className="landingProfileEdit">
               {/* <button>Edit Personal Details</button> */}
               <span onClick={handleLogout}>Logout</span>
+              <Link to={`/admin`}>
+                <p>Admin?</p>
+              </Link>
             </div>
           </div>
 
@@ -229,7 +248,7 @@ const Landing = () => {
                       <div className="issueTitle">
                         <div className="issueTitleDesc">
                           <h3>
-                            <span>Status:</span> Pending
+                            <span>Status:</span> {report.status || "pending"}
                           </h3>
                           <h3>
                             <span>Created:</span>{" "}
@@ -290,12 +309,17 @@ const Landing = () => {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="volvo" disabled>
+              <option value="" disabled>
                 Select
               </option>
-              <option value="saab">Saab</option>
-              <option value="mercedes">Mercedes</option>
-              <option value="audi">Audi</option>
+              {fetchedCategory &&
+                fetchedCategory.map((fc) => (
+                  <>
+                    <option key={fc._id} value={fc.category}>
+                      {fc.category}
+                    </option>
+                  </>
+                ))}
             </select>
 
             <label htmlFor="description">Enter a description</label>
@@ -306,25 +330,36 @@ const Landing = () => {
               id="description"
               cols="50"
               onChange={(e) => setDescription(e.target.value)}
-            ></textarea>
+            />
 
             <span style={{ fontSize: "20px" }}>
               Please attach a relevant image
             </span>
-            <div className="fileUpload">
-              <BsCloudUpload className="upload" />
+            <div className="fileImg upload">
+              <div className="actualUpload">
+                <BsCloudUpload className="upload" />
+                <input
+                  type="file"
+                  name=""
+                  id=""
+                  accept="image/*"
+                  onChange={(e) => postDetails(e.target.files[0])}
+                />
+                <p>
+                  Recommendation: Use high-quality JPG, JPEG, SVG or PNG as your
+                  profile
+                </p>
+              </div>
 
-              <input
-                type="file"
-                name=""
-                id=""
-                accept="image/*"
-                onChange={(e) => postDetails(e.target.files[0])}
-              />
-              <p>
-                Recommendation: Use high-quality JPG, JPEG, SVG or PNG as your
-                profile
-              </p>
+              <div className="uploadImg">
+                <img
+                  src={
+                    image ||
+                    "https://images.pexels.com/photos/6800789/pexels-photo-6800789.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                  }
+                  alt=""
+                />
+              </div>
             </div>
 
             {loading ? (

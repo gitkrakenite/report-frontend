@@ -30,7 +30,22 @@ const getReport = async (token) => {
   return response.data;
 };
 
-// get my report
+// get all reports
+const getAllReports = async () => {
+  const response = await axios.get(`${API_URL}admin/39104245`);
+  return response.data;
+};
+
+// updateReport reports
+const updateReport = async (reportId, reportData) => {
+  const response = await axios.put(
+    `${API_URL}admin/39104245/${reportId}`,
+    reportData
+  );
+  return response.data;
+};
+
+// delete my report
 const deleteReport = async (reportId, token) => {
   const config = {
     headers: {
@@ -47,6 +62,8 @@ const reportService = {
   createReport,
   getReport,
   deleteReport,
+  getAllReports,
+  updateReport,
 };
 
 export default reportService;

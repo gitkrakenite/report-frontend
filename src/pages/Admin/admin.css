@@ -103,6 +103,34 @@
   margin-top: 10px;
 }
 
+.adminDeleteCategory {
+  max-height: 150px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow-y: scroll;
+}
+.adminDeleteCategory span {
+  background-color: black;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.AdminDeleteItem {
+  display: flex;
+  margin-top: 10px;
+  gap: 20px;
+  align-items: center;
+}
+
+.AdminDeleteItem h3 {
+  color: red;
+  cursor: pointer;
+  font-size: 16px;
+}
+
 .allReportsItem {
   margin-top: 15px;
   margin-bottom: 15px;

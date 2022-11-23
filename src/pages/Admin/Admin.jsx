@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import "./admin.css";
+
+import { AiOutlineDelete } from "react-icons/ai";
 
 import {
   getAllReports,
@@ -15,11 +17,15 @@ import axios from "axios";
 const Admin = () => {
   const [status, setStatus] = useState("");
   const [category, setCategory] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [alreadyFetched, setAlreadyFetched] = useState(false);
+
+  const [fetchedCategory, setFetchedCategory] = useState();
 
   const url = "http://localhost:5000/api/v1/report/admin/39104245/";
 
   // access the user from redux
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state?.auth);
 
   // access the reports
   const { reports, isLoading, isError, isSuccess, message } = useSelector(
@@ -60,6 +66,7 @@ const Admin = () => {
     // console.log(response.data);
   };
 
+  // create category
   const handleCategory = async () => {
     try {
       const payload = { category };
@@ -86,8 +93,64 @@ const Admin = () => {
     }
   };
 
+  // fetch categories from db
+  const fetchCategories = async () => {
+    try {
+      let response = await axios.get(`${url}cat`);
+      setLoading(true);
+      // console.log(response);
+      setFetchedCategory(response?.data);
+      setLoading(false);
+      setAlreadyFetched(true);
+      console.log(fetchedCategory);
+    } catch (error) {}
+  };
+
+  const hideCategories = () => {
+    setFetchedCategory();
+    setAlreadyFetched(false);
+  };
+
+  const handleDeleteCategory = async (id) => {
+    const response = await axios.delete(`${url}${id}`);
+
+    if (response) {
+      toast({
+        title: "Deletion Succesful. Refresh",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
+  // useEffect(() => {
+  //   let isMounted = true;
+
+  //   if (isMounted) {
+  //     (async () => {
+  //       try {
+  //         setLoading(true);
+  //         const response = await axios.get(`${url}cat`);
+  //         if (response?.status === 200) {
+  //           console.log(response);
+  //           setLoading(false);
+  //           setFetchedCategory(response?.data);
+  //         }
+  //       } catch (error) {
+  //         setLoading(false);
+  //         console.log(error);
+  //       }
+  //     })();
+  //   }
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, []);
+
   useEffect(() => {
-    if (user.isAdmin === "false") {
+    if (user?.isAdmin === "false") {
       navigate("/");
       toast({
         title: "You are not an admin. Contact system admin",
@@ -99,10 +162,7 @@ const Admin = () => {
     }
 
     dispatch(getAllReports());
-    // return () => {
-    //   dispatch(reset());
-    // };
-  }, [user, navigate]);
+  }, [user, dispatch, navigate]);
 
   return (
     <div className="adminWrapper">
@@ -138,6 +198,30 @@ const Admin = () => {
               />
               <span onClick={handleCategory}>Create</span>
             </form>
+          </div>
+          {/*  */}
+          <div className="adminDeleteCategory">
+            {alreadyFetched ? (
+              <span onClick={hideCategories}>Hide Categories</span>
+            ) : (
+              <span onClick={fetchCategories}>See All Categories</span>
+            )}
+            {loading ? (
+              <Spinner message="please wait" />
+            ) : (
+              <>
+                {fetchedCategory?.map((cat) => (
+                  <div className="AdminDeleteItem" key={cat._id}>
+                    <p>{cat.category}</p>
+                    <h3>
+                      <AiOutlineDelete
+                        onClick={() => handleDeleteCategory(cat._id)}
+                      />
+                    </h3>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </div>
         {/*  */}

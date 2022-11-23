@@ -396,23 +396,9 @@
 }
 
 @media (max-width: 430px) {
-  .landingWrapper {
+  .issue {
     display: block;
   }
-
-  .landingProfileShowInfo {
-    display: block;
-  }
-
-  .issueTitle p {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    width: 250px;
-    word-wrap: break-word;
-  }
-}
-
-@media (max-width: 400px) {
   .landingWrapper {
     display: block;
   }
@@ -420,20 +406,12 @@
   .issueTitle p {
     margin-top: 10px;
     margin-bottom: 20px;
-    width: 200px;
+    width: 100%;
     word-wrap: break-word;
   }
-}
 
-@media (max-width: 390px) {
-  .landingWrapper {
-    display: block;
-  }
-
-  .issueTitle p {
+  .issueOptions {
+    width: 100%;
     margin-top: 10px;
-    margin-bottom: 20px;
-    width: 180px;
-    word-wrap: break-word;
   }
 }

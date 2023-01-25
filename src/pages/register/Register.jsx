@@ -175,7 +175,7 @@ const Register = () => {
           />
         </div>
         <div className="formSlide">
-          <h1>Co-operative University</h1>
+          <h1>Manchester University</h1>
 
           <h2>Register</h2>
           <form onSubmit={handleSubmit}>

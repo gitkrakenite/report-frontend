@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "proxy": "http://localhost:5000",
+  "proxy": "https://report-backend.vercel.app",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.4.1",

@@ -2,7 +2,7 @@ import axios from "axios";
 
 // this file is strictly for the http requests, sending the data back and storing in localstorage
 
-const API_URL = "http://localhost:5000/api/v1/user/";
+const API_URL = "https://report-backend.vercel.app/api/v1/user/";
 // const API_URL = "/api/v1/user";
 
 // register user

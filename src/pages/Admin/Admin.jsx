@@ -22,7 +22,7 @@ const Admin = () => {
 
   const [fetchedCategory, setFetchedCategory] = useState();
 
-  const url = "http://localhost:5000/api/v1/report/admin/39104245/";
+  const url = "https://report-backend.vercel.app/api/v1/report/admin/39104245/";
 
   // access the user from redux
   const { user } = useSelector((state) => state?.auth);
